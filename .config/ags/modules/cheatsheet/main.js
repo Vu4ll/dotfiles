@@ -6,18 +6,12 @@ import { ExpandingIconTabContainer } from '../.commonwidgets/tabcontainer.js';
 import { checkKeybind } from '../.widgetutils/keybind.js';
 import clickCloseRegion from '../.commonwidgets/clickcloseregion.js';
 import PeriodicTable from "./periodictable.js";
-import quran from './quran.js';
 import { getString } from '../../i18n/i18n.js';
 const cheatsheets = [
     {
         name: getString('Keybinds'),
         materialIcon: 'keyboard',
         contentWidget: Keybinds,
-    },
-    {
-        name: getString('Al Quran Al Kareem'),
-        materialIcon: 'book',
-        contentWidget: quran,
     },
     {
         name: getString('Periodic table'),

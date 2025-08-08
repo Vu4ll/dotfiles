@@ -1,18 +1,4 @@
 {
-  "muslim": {
-    "enabled": false,
-    "prayerTimes": {
-      "city": "Karaman",
-      "country": "Turkey"
-    },
-    "adhanFiles": {
-      "fajr": "adhan_fajr.mp3",
-      "dhuhr": "adhan_default.mp3",
-      "asr": "adhan_default.mp3",
-      "maghrib": "adhan_default.mp3",
-      "isha": "adhan_default.mp3"
-    }
-  },
   "indicators": {
     "enabled": true
   },
@@ -149,8 +135,7 @@
         "powerProfiles",
         "taskManager",
         "bluetooth",
-        "wifiNetworks",
-        "prayerTimes"
+        "wifiNetworks"
       ],
       "vpnGate": {
         "enabled": false
@@ -172,9 +157,6 @@
         "enabled": true
       },
       "wifiNetworks": {
-        "enabled": true
-      },
-      "prayerTimes": {
         "enabled": true
       }
     },
@@ -258,7 +240,6 @@
         "order": [
           "gpt",
           "gemini",
-          "quran",
           "translater"
         ]
       }
@@ -272,7 +253,8 @@
       "languages": {
         "auto": "Auto",
         "en": "English",
-        "tr": "Turkish"
+        "tr": "Turkish",
+        "nl": "Dutch"
       }
     }
   },
@@ -401,9 +383,6 @@
       "deleteToEnd": "Ctrl+k"
     },
     "sidebar": {
-      "prayerTimes": {
-        "city": "Karaman"
-      },
       "apis": {
         "nextTab": "Page_Down",
         "prevTab": "Page_Up"

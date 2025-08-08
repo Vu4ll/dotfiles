@@ -12,22 +12,18 @@ import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { RoundedCorner } from '../.commonwidgets/cairo_roundedcorner.js';
 const elevate = userOptions.asyncGet().etc.widgetCorners ? "record-rounding" : "elevation" ;
 
-// متغيرات الحالة
 const isRecording = Variable(false);
 const isPaused = Variable(false);
-const isMicEnabled = Variable(true);  // المايكروفون: true = شغال، false = مقفول
-const isSystemAudioEnabled = Variable(true); // صوت النظام: true = شغال، false = مقفول
-const isScreen = Variable(true);  // حالة التسجيل: true = شاشة كاملة، false = منطقة محددة
-const isHD = Variable(false);  // الجودة: true = عالية، false = عادية
+const isMicEnabled = Variable(true); 
+const isSystemAudioEnabled = Variable(true);
+const isScreen = Variable(true);
+const isHD = Variable(false);
 
-// تخزين مسار الملف للاستخدام في الإشعارات
 let outputFile = '';
 
-// معرفات مصادر الصوت (ثابتة)
 const MICROPHONE_SOURCE = 'alsa_input.pci-0000_00_1f.3.analog-stereo';
 const SYSTEM_AUDIO_SOURCE = 'alsa_output.pci-0000_00_1f.3.analog-stereo.monitor';
 
-// الأيقونات
 const RecordIcon = () => MaterialIcon(
     isRecording.bind().transform(v => v ? 'stop_circle' : 'video_camera_front'), 
     'large'
@@ -58,92 +54,64 @@ const SystemAudioIcon = () => MaterialIcon(
     'large'
 );
 
-// إعداد معلمات الأمر بناءً على حالة المتغيرات
 const buildRecordingCommand = () => {
     const cmd = ['wf-recorder'];
     const recordingPath = GLib.get_home_dir() + (userOptions.asyncGet().etc.recordingPath || '/Videos/');
     outputFile = recordingPath + `${Date.now()}.mp4`;
     
-    // إدارة مصادر الصوت
     if (isMicEnabled.value && isSystemAudioEnabled.value) {
-        // إذا كان كل من المايكروفون وصوت النظام مفعلين
-        // نستخدم وسيلة "parec" لدمج مصادر الصوت
-        // ملاحظة: هذه الطريقة ستتطلب تثبيت حزمة pulseaudio-utils
-        // يتم تحديد استخدام الصوت بشكل عام
         cmd.push('-a');
     } else if (isMicEnabled.value) {
-        // إذا كان المايكروفون فقط مفعلاً
         cmd.push('--audio=' + MICROPHONE_SOURCE);
     } else if (isSystemAudioEnabled.value) {
-        // إذا كان صوت النظام فقط مفعلاً
         cmd.push('--audio=' + SYSTEM_AUDIO_SOURCE);
     }
     
-    // إضافة خيارات الجودة
     if (isHD.value) {
         cmd.push('--codec=libx264');
-        // خيارات أبسط لتجنب مشاكل التحليل
         cmd.push('-p');
         cmd.push('tune=zerolatency');
     }
     
-    // إضافة مسار الملف الناتج
     cmd.push('-f');
     cmd.push(outputFile);
     
     return cmd;
 };
 
-// تحديث الإشعارات بحيث تعكس حالة الإعدادات بدقة
 const showRecordingNotification = () => {
-    // تحضير تفاصيل الإشعار
     const details = [];
-    
-    // إظهار حالة المايكروفون
     details.push(`Microphone: ${isMicEnabled.value ? 'ON' : 'OFF'}`);
     
-    // إظهار حالة صوت النظام
     details.push(`System Audio: ${isSystemAudioEnabled.value ? 'ON' : 'OFF'}`);
     
-    // إظهار حالة الجودة
     details.push(`Quality: ${isHD.value ? 'HD' : 'Standard'}`);
     
-    // إظهار وضع التسجيل
     details.push(`Mode: ${isScreen.value ? 'Full Screen' : 'Area Selection'}`);
     
-    // إظهار مسار الملف
     details.push(`Saving to: ${outputFile}`);
     
-    // إرسال الإشعار مع أيقونة مناسبة
     execAsync(`notify-send "Recording started" "${details.join('\n')}" -i video-display`)
         .catch(console.error);
 };
 
-// بدء التسجيل
 const startRecording = () => {
     isRecording.value = true;
     isPaused.value = false;
     
-    // إعداد معلمات الأمر الأساسية
     const cmd = buildRecordingCommand();
     
-    // إغلاق واجهة الريكوردر قبل البدء في التسجيل
     App.closeWindow('recorder');
     
-    // منطق مختلف بناءً على وضع التسجيل (شاشة كاملة أو منطقة محددة)
     if (!isScreen.value) {
-        // إذا كان وضع تحديد منطقة، اعرض أداة التحديد أولاً
         execAsync(`notify-send "Area Selection" "Select an area to record" -i video-display`)
             .then(() => {
-                // استخدام slurp لاختيار منطقة
                 return execAsync(['slurp']).then(geometry => {
-                    // إضافة الهندسة المحددة إلى أمر wf-recorder
                     cmd.push('-g');
                     cmd.push(geometry.trim());
                     
                     console.log("Record command (area):", cmd.join(' '));
                     
-                    // إظهار إشعار ببدء التسجيل بعد اختيار المنطقة
                     showRecordingNotification();
                     
                     return execAsync(cmd);
@@ -155,7 +123,6 @@ const startRecording = () => {
                 isRecording.value = false;
             });
     } else {
-        // وضع تسجيل الشاشة الكاملة
         console.log("Record command (fullscreen):", cmd.join(' '));
         
         execAsync(cmd)
@@ -165,12 +132,10 @@ const startRecording = () => {
                 isRecording.value = false;
             });
             
-        // إظهار إشعار ببدء التسجيل فوراً في وضع الشاشة الكاملة
         showRecordingNotification();
     }
 };
 
-// توقف مؤقت/استئناف التسجيل
 const togglePauseResume = () => {
     if (!isRecording.value) return;
     
@@ -184,7 +149,6 @@ const togglePauseResume = () => {
         .catch(console.error);
 };
 
-// إيقاف التسجيل
 const stopRecording = () => {
     if (!isRecording.value) return;
     
@@ -192,13 +156,11 @@ const stopRecording = () => {
         .then(() => {
             isRecording.value = false;
             isPaused.value = false;
-            // إرسال إشعار بإيقاف التسجيل
             return execAsync(`notify-send "Recording stopped" "Saved to ${outputFile}" -i video-display`);
         })
         .catch(console.error);
 };
 
-// تبديل حالة صوت النظام
 const toggleSystemAudio = () => {
     isSystemAudioEnabled.value = !isSystemAudioEnabled.value;
     
@@ -209,14 +171,12 @@ const toggleSystemAudio = () => {
     execAsync(`notify-send "${message}" "System audio will ${isSystemAudioEnabled.value ? '' : 'NOT'} be recorded" -i ${isSystemAudioEnabled.value ? 'audio-volume-high' : 'audio-volume-muted'}`)
         .catch(console.error);
         
-    // إذا كان التسجيل قيد التشغيل، أخبر المستخدم أن التغيير سيؤثر على التسجيل التالي
     if (isRecording.value) {
         execAsync(`notify-send "Note" "System audio changes will apply to next recording" -i info`)
             .catch(console.error);
     }
 };
 
-// تبديل حالة المايكروفون
 const toggleMicrophone = () => {
     isMicEnabled.value = !isMicEnabled.value;
     
@@ -226,14 +186,12 @@ const toggleMicrophone = () => {
     execAsync(`notify-send "${message}" "Microphone will ${isMicEnabled.value ? '' : 'NOT'} be used in recording" -i ${icon}`)
         .catch(console.error);
         
-    // إذا كان التسجيل قيد التشغيل، أخبر المستخدم أن التغيير سيؤثر على التسجيل التالي
     if (isRecording.value) {
         execAsync(`notify-send "Note" "Microphone changes will apply to next recording" -i info`)
             .catch(console.error);
     }
 };
 
-// تغيير حالة جودة التسجيل وإرسال إشعار
 const toggleQuality = () => {
     isHD.value = !isHD.value;
     
@@ -241,14 +199,12 @@ const toggleQuality = () => {
     execAsync(`notify-send "${message}" "Recording will be in ${isHD.value ? 'high' : 'standard'} quality" -i preferences-desktop-display`)
         .catch(console.error);
     
-    // تطبيق إعدادات الجودة العالية إذا كان التسجيل جارياً
     if (isRecording.value) {
         execAsync(`notify-send "Note" "Quality changes will apply to next recording" -i info`)
             .catch(console.error);
     }
 };
 
-// تغيير وضع التسجيل وإرسال إشعار
 const toggleScreenMode = () => {
     isScreen.value = !isScreen.value;
     
@@ -256,14 +212,12 @@ const toggleScreenMode = () => {
     execAsync(`notify-send "${message}" "Recording will capture ${isScreen.value ? 'entire screen' : 'selected area'}" -i video-display`)
         .catch(console.error);
     
-    // إذا كان التسجيل جارياً، أخبر المستخدم أن التغيير سيطبق في التسجيل التالي
     if (isRecording.value) {
         execAsync(`notify-send "Note" "Screen mode changes will apply to next recording" -i info`)
             .catch(console.error);
     }
 };
 
-// أزرار التحكم
 const recordButton = Button({
     className: 'recorder-btn-red',
     onClicked: () => isRecording.value ? stopRecording() : startRecording(),
@@ -312,7 +266,6 @@ const systemAudioButton = Button({
     setup: setupCursorHover,
 });
 
-// تصدير نافذة التسجيل
 export default () => PopupWindow({
     name: 'recorder',
     anchor: ['top', 'right', 'bottom'],

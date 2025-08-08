@@ -2,7 +2,6 @@ import Widget from "resource:///com/github/Aylur/ags/widget.js";
 const { Box, EventBox, Stack } = Widget;
 const { GLib } = imports.gi;
 import { MaterialIcon } from "../../.commonwidgets/materialicon.js";
-import PrayerTimesWidget from './prayertimes.js';
 import WeatherOnly from './weatherOnly.js';
 import Media from 'resource:///com/github/Aylur/ags/service/mpris.js';
 import Notifications from 'resource:///com/github/Aylur/ags/service/notifications.js';
@@ -76,7 +75,6 @@ const WeatherWidget = () => {
         css: `padding: 0 20px`,
         children: {
             'weather': WeatherOnly(),
-            'prayer': PrayerTimesWidget(),
             'media': mediaContent,
             'notification': notificationContent,
             'clock': clockContent,
@@ -121,7 +119,7 @@ const WeatherWidget = () => {
 
     // Cycling logic
     const cycleModes = () => {
-        const modes = ['weather', 'prayer', 'media', 'clock', 'username'];
+        const modes = ['weather', 'media', 'clock', 'username'];
         const currentIndex = modes.indexOf(displayMode);
         displayMode = modes[(currentIndex + 1) % modes.length];
         contentStack.shown = displayMode;

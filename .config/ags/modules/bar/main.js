@@ -21,7 +21,7 @@ import * as Utils from "resource:///com/github/Aylur/ags/utils.js";
 const SCHEMA_ID = "org.gnome.shell.extensions.ags";
 const KEY_BAR_MODE = "bar-mode";
 const settings = new Gio.Settings({ schema_id: SCHEMA_ID });
-const DEFAULT_MODE = settings.get_string(KEY_BAR_MODE) || "0";
+const DEFAULT_MODE = settings.get_string(KEY_BAR_MODE) || "4";
 
 // Performance optimization: Cache bar components
 const barComponentCache = new Map();

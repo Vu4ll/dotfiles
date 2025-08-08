@@ -4,7 +4,6 @@ import { Tray } from "../modules/tray.js";
 import { bluetoothPill, NotificationIndicator } from "../../.commonwidgets/statusicons.js";
 import Clock from "../modules/clock.js";
 import NetworkSpeed from "../../.commonwidgets/networkspeed.js";
-import PrayerTimesWidget from "../modules/prayertimes.js";
 import WeatherOnly from "../modules/weatherOnly.js";
 import NormalOptionalWorkspaces from "../normal/workspaces_hyprland.js";
 import SystemResources from "../normal/resources.js";
@@ -80,14 +79,6 @@ export const SaadiBar = Widget.CenterBox({
         children: [
           scrolledmodule({
             children:[
-              Widget.Box({
-                hpack: 'end',
-                hexpand: true,
-                className: "group-saadi",
-                children: [
-                  PrayerTimesWidget()
-                ],
-              }),
               Widget.Box({
                 hpack: 'end',
                 hexpand: true,

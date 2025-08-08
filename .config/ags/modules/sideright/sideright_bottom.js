@@ -23,7 +23,6 @@ import ModuleWifiNetworks from "./centermodules/wifinetworks.js";
 import ModulePowerProfiles from './centermodules/powerprofiles.js';
 import ModuleBluetooth from "./centermodules/bluetooth.js";
 import { ModuleCalendar } from "./modules/calendar.js";
-import ModulePrayerTimes from './centermodules/prayertimes.js';
 import { getDistroIcon } from '../.miscutils/system.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { ExpandingIconTabContainer } from '../.commonwidgets/tabcontainer.js';
@@ -76,11 +75,6 @@ const modulesList = {
         materialIcon: 'wifi',
         contentWidget: ModuleWifiNetworks,
         onFocus: () => execAsync('nmcli dev wifi list').catch(print),
-    },
-    prayerTimes: {
-        name: 'Prayer Times',
-        materialIcon: 'mosque',
-        contentWidget: ModulePrayerTimes,
     },
 };
 

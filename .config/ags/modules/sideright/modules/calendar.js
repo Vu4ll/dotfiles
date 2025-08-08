@@ -8,7 +8,6 @@ import { TimerWidget } from "./timers.js";
 import { TodoWidget } from "./todolist.js";
 import { getCalendarLayout } from "./calendar_layout.js";
 import AudioFiles from "./media.js";
-import { PrayerTimesWidget } from "../prayertimes.js";
 let calendarJson = getCalendarLayout(undefined, true);
 let monthshift = 0;
 let userOpts = userOptions.asyncGet();
@@ -161,9 +160,6 @@ const CalendarWidget = () => {
 
 // Define valid options for the default shown module
 const validOptions = ["calendar", "todo", "media", "timers"];
-if (userOpts.muslim?.enabled) {
-  validOptions.push("PrayerTimes");
-}
 
 // Get the default shown module from config or fallback to "calendar"
 let configDefault = userOpts.sidebar?.ModuleCalendar?.default || "calendar";
@@ -175,7 +171,6 @@ const contentStack = Widget.Stack({
   vexpand: false,
   homogeneous: true,
   children: {
-    ...(userOpts.muslim?.enabled ? { PrayerTimes: PrayerTimesWidget() } : {}),
     calendar: CalendarWidget(),
     todo: TodoWidget(),
     media: AudioFiles(),
@@ -191,9 +186,6 @@ const contentStack = Widget.Stack({
   //   Utils.timeout(1, () => (stack.shown = defaultShown));
   //   userOptions.subscribe(newOpts => {
   //     userOpts = newOpts;
-  //     if (!newOpts.muslim?.enabled && stack.shown === "PrayerTimes") {
-  //       stack.shown = "calendar";
-  //     }
   //   });
   // },
 });
@@ -246,7 +238,6 @@ export const ModuleCalendar = () =>
           vertical: true,
           className: "sidebar-navrail spacing-v-10",
           children: [
-            ...(userOpts.muslim?.enabled ? [StackButton("PrayerTimes", "mosque", getString("Prayers"))] : []),
             StackButton("calendar", "calendar_month", getString("Calendar")),
             StackButton("todo", "done_outline", getString("To Do")),
             StackButton("media", "music_note", getString("Media")),

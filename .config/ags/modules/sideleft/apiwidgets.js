@@ -11,7 +11,6 @@ import Gemini from '../../services/gemini.js';
 import { geminiView, geminiCommands, sendMessage as geminiSendMessage, geminiTabIcon } from './apis/gemini.js';
 import { chatGPTView, chatGPTCommands, sendMessage as chatGPTSendMessage, chatGPTTabIcon } from './apis/chatgpt.js';
 import { TranslaterView, translaterCommands, sendMessage as translaterSendMessage, translaterIcon } from './apis/translater.js';
-import { quranView, quranCommands, sendMessage as quranSendMessage, quranTabIcon } from './apis/quran.js';
 import { medicalDictionaryView, medicalDictionaryCommands, sendMessage as medicalDictionarySendMessage, medicalDictionaryTabIcon } from './apis/medicaldictionary.js';
 import { wallpaperView, wallpaperCommands, sendMessage as wallpaperSendMessage, wallpaperTabIcon } from './apis/wallpapers.js';
 
@@ -27,14 +26,6 @@ const EXPAND_INPUT_THRESHOLD = 30;
 
 // Define a master list of APIs including all the imported commands, views, and icons.
 const APILIST = {
-  'quran': {
-    name: 'Quran',
-    sendCommand: quranSendMessage,
-    contentWidget: quranView,
-    commandBar: quranCommands,
-    tabIcon: quranTabIcon,
-    placeholderText: 'وَقُل رَّبِّ زِدْنِي عِلْمًا'
-  },
   'wallpapers': {
     name: 'Wallpapers',
     sendCommand: wallpaperSendMessage,
@@ -82,9 +73,6 @@ let APIS = writable([]);
 // Subscribe to user options so that the enabled APIs (by order) are set into our APIS store.
 userOptions.subscribe((n) => {
   const enabledApis = n.sidebar.pages.apis.order.filter(apiName => {
-    if (apiName === 'quran') {
-      return n.muslim?.enabled ?? false;
-    }
     return true;
   });
   APIS.set(enabledApis.map((apiName) => APILIST[apiName]));

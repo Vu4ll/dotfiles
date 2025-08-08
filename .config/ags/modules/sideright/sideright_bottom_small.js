@@ -25,7 +25,6 @@ import ModulePowerProfiles from './centermodules/powerprofiles.js';
 import ModuleBluetooth from "./centermodules/bluetooth.js";
 import { TodoWidget } from './modules/todolist.js';
 import { ModuleCalendar } from "./modules/calendar.js";
-import ModulePrayerTimes from './centermodules/prayertimes.js';
 import { getDistroIcon } from '../.miscutils/system.js';
 import { MaterialIcon } from '../.commonwidgets/materialicon.js';
 import { ExpandingIconTabContainer } from '../.commonwidgets/tabcontainer.js';
@@ -35,7 +34,6 @@ import GLib from 'gi://GLib';
 // import Battery from 'resource:///com/github/Aylur/ags/service/battery.js';
 import VPN from './centermodules/vpn.js';
 import taskmanager from './centermodules/taskmanager.js';
-import { PrayerTimesWidget } from './modules/prayertimes.js';
 import inline_clock from '../bar/modules/inline_clock.js';
 const config = userOptions.asyncGet();
 const elevate = userOptions.asyncGet().etc.widgetCorners ? "sidebar-r sidebar-bottom"  : "sidebar-r elevation " ;
@@ -75,11 +73,6 @@ const modulesList = {
         materialIcon: 'wifi',
         contentWidget: ModuleWifiNetworks,
         onFocus: () => execAsync('nmcli dev wifi list').catch(print),
-    },
-    prayerTimes: {
-        name: 'Prayer Times',
-        materialIcon: 'mosque',
-        contentWidget: ModulePrayerTimes,
     },
 };
 

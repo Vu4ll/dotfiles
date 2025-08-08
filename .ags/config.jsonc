@@ -1,18 +1,4 @@
 {
-  "muslim": {
-    "enabled": false,
-    "prayerTimes": {
-      "city": "Matrouh",
-      "country": "Egypt"
-    },
-    "adhanFiles": {
-      "fajr": "adhan_fajr.mp3",
-      "dhuhr": "adhan_default.mp3",
-      "asr": "adhan_default.mp3",
-      "maghrib": "adhan_default.mp3",
-      "isha": "adhan_default.mp3"
-    }
-  },
   "indicators": {
     "enabled": true
   },
@@ -138,8 +124,7 @@
         "taskManager",
         "bluetooth",
         "wifiNetworks",
-        "vpnGate",
-        "prayerTimes"
+        "vpnGate"
       ],
       "vpnGate": {
         "enabled": false
@@ -162,9 +147,6 @@
       },
       "wifiNetworks": {
         "enabled": true
-      },
-      "prayerTimes": {
-        "enabled": false
       }
     },
     "github": {
@@ -244,14 +226,12 @@
     "translater": {
       "__custom": ["languages"],
       "from": "auto",
-      "to": "ar",
+      "to": "en",
       "languages": {
         "auto": "Auto",
         "en": "English",
-        "ar": "Arabic",
-        "fr": "French",
-        "de": "German",
-        "ru": "Russian"
+        "tr": "Turkish",
+        "nl": "Dutch"
       }
     }
   },
@@ -370,9 +350,6 @@
       "deleteToEnd": "Ctrl+k"
     },
     "sidebar": {
-      "prayerTimes": {
-        "city": "Cairo"
-      },
       "apis": {
         "nextTab": "Page_Down",
         "prevTab": "Page_Up"
