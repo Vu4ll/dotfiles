@@ -120,4 +120,5 @@
 !/sddm-astronaut-theme/**
 
 !restore-dotfiles.sh
+!README.md
 !.gitignore
