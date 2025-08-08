@@ -119,4 +119,5 @@
 !/sddm-astronaut-theme/
 !/sddm-astronaut-theme/**
 
+!restore-dotfiles.sh
 !.gitignore
