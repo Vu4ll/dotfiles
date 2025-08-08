@@ -39,8 +39,8 @@ sddm-astronaut-theme/ # Login ekranı teması
 ### Otomatik Kurulum
 ```bash
 # Repo'yu klonla
-git clone https://github.com/Vu4ll/hyprland-dotfiles.git
-cd hyprland-dotfiles
+git clone https://github.com/Vu4ll/dotfiles.git
+cd dotfiles
 
 # Script'i çalıştırılabilir yap
 chmod +x restore-dotfiles.sh
